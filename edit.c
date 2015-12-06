@@ -1,4 +1,4 @@
-/*                                                                                                                                                                                                                 
+/*                                                                                                       
 * ----------------------------------------------------------------------------  
 * "THE BEER-WARE LICENSE" (Revision 42):                                        
 * <Johan> wrote this file. As long as you retain this notice you
@@ -16,6 +16,8 @@
 void delete_point(screen_buffer_t *screen_buffer, int pos) {
     /*
        1. Make sure the current buffer position is within the screen buffer
+          (This should never happen. Is it even a possible bug?
+	   Check maybe uneeded)
        2. Set y,x, fg, bg, ch to 0 on current buffer position
        3. Set a variable to indicate that the screen buffer is modified
      */
@@ -34,7 +36,5 @@ void edit_point(screen_buffer_t *screen_buffer, int pos) {
           XXX: We could save some extra bytes by storing color pair number
                instead of fg and bg separate. Read more in file.c
        3. Set a variable to indicate that the screen buffer is modified
-
-        
      */
 }
