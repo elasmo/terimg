@@ -9,7 +9,7 @@
 #include "main.h"
 #include "init.h"
 
-void endProgram() {                                                             
+void exit_program() {                                                             
     curs_set(1);                                                                  
     endwin();                                                                     
     fprintf(stderr, "Exiting!\n");                                                
@@ -26,8 +26,8 @@ int main(int argc, char *argv[]) {
 
     init_curses();
     init_colors();
-    init_screen_buffer(screen);
-    init_menu(); /// XXX: def
+    //init_screen_buffer(screen);
+    //init_menu(); /// XXX: def
 
 
     if(argc > 1) {
