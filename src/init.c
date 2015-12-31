@@ -7,8 +7,8 @@
 * ----------------------------------------------------------------------------  
 */                   
 
-#include <curses.h>
-#include <errno.h>
+#include "init.h"
+#include "window.h"
 
 /**
   * Initialize curses
@@ -18,6 +18,9 @@ void init_curses() {
     initscr();
     curs_set(0);
     noecho();
+
+    int term_height = MAX_HEIGHT; // FIXME lyulz
+    int term_width = MAX_WIDTH; // FIXME lyulz
 
     (void) getmaxyx(stdscr, term_height, term_width);
     if(term_height < MAX_HEIGHT || term_width < MAX_WIDTH) {
@@ -38,18 +41,21 @@ void init_colors() {
 
     start_color();
 
-    short color_pair, fg, bg, i, n;
-    n_pair = 0;                                                                 
+    //short color_pair, fg, bg, i, n;
+
+    //n_pair = 0;                                                                 
                                                                                 
     /* XXX: untested code
        8 different colors, looping through to get all possible combinations
      */
+    /*
     for(n = 8; n >= 0; n--) {                                                   
         for(i = 0; i <= 8; i++) {                                               
             init_pair(color_pair, fg, bg);
             n_pair++;                                                           
         }                                                                       
     }                              
+    */
 }
 
 /**

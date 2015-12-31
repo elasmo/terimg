@@ -7,10 +7,10 @@
 * ----------------------------------------------------------------------------  
 */      
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
 #include "screen_buffer.h"
+#include "init.h"
+
+#define num_points(x) (MAX_WIDTH * MAX_HEIGHT * x)
 
 /**
   * Create new empty screen buffer

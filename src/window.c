@@ -15,8 +15,10 @@
   */
 WINDOW *create_window(short height, short width, short begin_y, short begin_x, 
                       const bool BORDER) {
+    /*
     if(BORDER)
-//        box();
+        box();
+     */
 
     return newwin(height, width, begin_y, begin_x);
 }

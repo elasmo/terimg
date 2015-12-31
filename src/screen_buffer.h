@@ -10,6 +10,12 @@
 #ifndef SCREEN_BUFFER_H
 #define SCREEN_BUFFER_H
 
+#include <ncurses.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
+
 // Point (x, y) definition
 typedef struct {
     short x;
@@ -29,7 +35,7 @@ typedef struct {
     chtype current_char;
     short current_color_pair;
     short cursor_x;
-    short cursor y;
+    short cursor_y;
     bool buffer_modified;
     short color_pairs;
 } screen_buffer_t;

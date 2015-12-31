@@ -7,16 +7,7 @@
 * ----------------------------------------------------------------------------  
 */                   
 
-#include <curses.h>
 #include "menu.h"
-
-typedef struct {
-    char *menu_title;
-    short width, height, begin_y, begin_x, num_items;
-    ITEMS **items;
-    MENU *menu;
-    WINDOW *win;
-} menu_t;
 
 /**
   * Initialize a submenu

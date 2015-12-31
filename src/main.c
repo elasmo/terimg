@@ -6,10 +6,15 @@
 * this stuff is worth it, you can buy me a beer in return. Johan                
 * ----------------------------------------------------------------------------  
 */                   
-#include <curses.h>
-#include <stdlib.h> // malloc
-#include <string.h> // memset
-#include <time.h> // time()
+#include "main.h"
+#include "init.h"
+
+void endProgram() {                                                             
+    curs_set(1);                                                                  
+    endwin();                                                                     
+    fprintf(stderr, "Exiting!\n");                                                
+    exit(EXIT_SUCCESS);                                                           
+}                        
 
 int main(int argc, char *argv[]) {
     int y_old, x_old, term_height, term_width, cur_pos;
@@ -21,7 +26,7 @@ int main(int argc, char *argv[]) {
 
     init_curses();
     init_colors();
-    init_screen_buffer();
+    init_screen_buffer(screen);
     init_menu(); /// XXX: def
 
 
@@ -53,3 +58,4 @@ int main(int argc, char *argv[]) {
 
     return(EXIT_SUCCESS);
 }
+

@@ -10,7 +10,17 @@
 #ifndef MENU_H
 #define MENU_H
 
-extern struct menu_t;
+#include <ncurses.h>
+#include <menu.h>
+
+typedef struct {                                                                                                                                                                      
+  char *menuTitle;                                                              
+  short width, height, beginY, beginX, numItems;                                
+  ITEM **items;                                                                 
+  MENU *menu;                                                                   
+  WINDOW *win;                                                                  
+} menu_t;        
+
 
 menu_t init_menu(const char *items[]);
 void deinit_submenu(menu_t *menu);

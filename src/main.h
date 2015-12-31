@@ -7,10 +7,20 @@
 * ----------------------------------------------------------------------------  
 */                   
 
-#ifndef EDIT_H
-#define EDIT_H
-#include "screen_buffer.h"
+#ifndef MAIN_H
+#define MAIN_H
 
-void delete_point(screen_buffer_t *screen_buffer, int pos);
-void edit_point(screen_buffer_t *screen_buffer, int pos);
+#include <curses.h>
+#include <stdlib.h> // malloc
+#include <string.h> // memset
+#include <time.h> // time()
+
+#include "edit.h"
+#include "file.h"
+#include "init.h"
+#include "menu.h"
+#include "screen_buffer.h"
+#include "window.h"
+
+void exit_program();
 #endif

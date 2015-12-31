@@ -1,4 +1,4 @@
-/*                                                                                                                                                                                                                 
+/*                                                                                              
 * ----------------------------------------------------------------------------  
 * "THE BEER-WARE LICENSE" (Revision 42):                                        
 * <Johan> wrote this file. As long as you retain this notice you
@@ -7,10 +7,12 @@
 * ----------------------------------------------------------------------------  
 */                   
 
-#ifndef EDIT_H
-#define EDIT_H
-#include "screen_buffer.h"
+#ifndef WINDOW_H
+#define WINDOW_H
 
-void delete_point(screen_buffer_t *screen_buffer, int pos);
-void edit_point(screen_buffer_t *screen_buffer, int pos);
+#include <curses.h>
+
+WINDOW *create_window(short height, short width, short begin_y, short begin_x, 
+                      const bool BORDER);
+void delete_window(WINDOW *win);
 #endif
