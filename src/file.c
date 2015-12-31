@@ -22,7 +22,7 @@ Fileformat:
 */
 
 #include <stdio.h>
-#include <string.> 
+#include <string.h>
 #include <errno.h>
 
 /**
@@ -38,13 +38,19 @@ void save_file(const char *filename, screen_buffer_t *screen_buffer) {
        5. Change screen buffer to unmodified (saved)
        6. Close file
      */
+
+    FILE *fp;
+    if((fp = fopen(filename, "wb")) == NULL) {
+        fclose(fp);
+        // Write error, notify user
+    }
 }
 
 /**
  * Open file
  *
  */
-screen_buffer_t open_file(const char *filename) {
+screen_buffer_t *open_file(const char *filename) {
     /*
        1. Check if current file exists
        2. Open file and check for read errors
@@ -54,11 +60,29 @@ screen_buffer_t open_file(const char *filename) {
        4. Verify 
        6. Close file and return screen buffer
      */
+    if(file_exists(filename)) {
+        // do stuff
+    }
+    else {
+        // don't do stuff, warn etc.
+    }
 }
 
-/*
+/**
  * Check if file exists
+ * XXX: stat(), access(), open() etc. can be used to get a better way of
+ * checking if the file sxists.
  *
  */
 bool file_exists(const char *filename) {
+    FILE *fp = NULL;
+
+    if((fp = fopen(filename, "rb")) == NULL) {
+        fclose(fp);
+        return 0;
+    }
+    else {
+        fclose(fp);
+        return 1;
+    }
 }

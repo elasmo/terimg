@@ -1,4 +1,4 @@
-/*                                                                                                                                                                                                                 
+/*                                                                            
 * ----------------------------------------------------------------------------  
 * "THE BEER-WARE LICENSE" (Revision 42):                                        
 * <Johan> wrote this file. As long as you retain this notice you
@@ -10,7 +10,6 @@
 #include <curses.h>
 #include <errno.h>
 
-// Initialize curses
 /**
   * Initialize curses
   *

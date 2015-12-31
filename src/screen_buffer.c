@@ -10,31 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-
-// Point (x,y) definition
-typedef struct {
-    short x;
-    short y;
-    short fg;
-    short bg; // XXX: See notes on fileformat in file.c
-    chtype ch;
-} point_t;
-
-
-// Screen buffer definition
-typedef struct {
-    point_t *points;
-    short file_version;
-    short width;
-    short height;
-    int area;
-    chtype current_char;
-    short current_color_pair;
-    short cursor_x;
-    short cursor y;
-    bool buffer_modified;
-    short color_pairs;
-} point_t;
+#include "screen_buffer.h"
 
 /**
   * Create new empty screen buffer
