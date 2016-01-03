@@ -37,6 +37,12 @@ void edit_point(screen_buffer_t *screen_buffer, int pos) {
                instead of fg and bg separate. Read more in file.c
        3. Set a variable to indicate that the screen buffer is modified
      */
+
+    if(screen_buffer->cursor_y > 0 && screen_buffer->cursor_x > 0) {
+        screen_buffer->points[pos].y = screen_buffer->cursor_y;
+        screen_buffer->points[pos].x = screen_buffer->cursor_x;
+        screen_buffer->points[pos].ch = screen_buffer->current_char;
+    }
 }
 
 /**

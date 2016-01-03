@@ -48,3 +48,11 @@ void show_screen_buffer(screen_buffer_t *image, WINDOW *win) {
         }
     }
 }
+
+/**
+  * Get cursors position in buffer
+  *
+  */
+int get_bufpos(int x, int y, int width) {
+    return (x -1) + ((y -1) * width);
+}

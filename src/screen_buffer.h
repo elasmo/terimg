@@ -43,5 +43,6 @@ typedef struct {
 
 point_t *new_screen_buffer();
 void show_screen_buffer(screen_buffer_t *image, WINDOW *win);
+int get_bufpos(int x, int y, int width);
 
 #endif

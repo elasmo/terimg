@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
                                          BORDER_BEGIN_Y, BORDER_BEGIN_X, TRUE);
     keypad(screen_buffer_window, TRUE);
     show_banner();
-    mvprintw(0,0, "%d:%d", IMAGE_WIDTH, IMAGE_HEIGHT);
+    mvprintw(0,2, "image size: %d:%d", IMAGE_WIDTH, IMAGE_HEIGHT);
     refresh();
 
     //init_menu(); /// XXX: def
@@ -59,6 +59,9 @@ int main(int argc, char *argv[]) {
     busy = 1;
     while(busy) {
         // Set cursor position in buffer
+        cur_pos = get_bufpos(screen_buffer.cursor_x, 
+                             screen_buffer.cursor_y,
+                             screen_buffer.width);
 
         // Clear current position
         mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
@@ -79,6 +82,9 @@ int main(int argc, char *argv[]) {
          * .. menu handler, screen buffer editing
          */
         switch(c = wgetch(screen_buffer_window)) {
+        case SPACE:
+            edit_point(&screen_buffer, cur_pos);
+            break;
         case KEY_UP:
             if(screen_buffer.cursor_y > 1)
                 --screen_buffer.cursor_y;
