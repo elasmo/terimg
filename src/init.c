@@ -64,10 +64,10 @@ void init_colors() {
   * Create screen buffer decorations
   *
   */
-//void create_screen_buffer_deco(WINDOW *screen_buffer_window) {
-//    screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
-//                                         BORDER_BEFIN_Y, BORDER_BEGIN_X, TRUE);
-//}
+WINDOW *create_screen_buffer_window() {
+    return create_window(MAX_HEIGHT+2, MAX_WIDTH+2, BORDER_BEGIN_Y, 
+                         BORDER_BEGIN_X, TRUE);
+}
 
 /**
   * Initialize a new screen buffer

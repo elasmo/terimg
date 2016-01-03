@@ -36,8 +36,7 @@ int main(int argc, char *argv[]) {
     /* Init */
     init_curses();
     init_colors();
-    screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
-                                         BORDER_BEGIN_Y, BORDER_BEGIN_X, TRUE);
+    screen_buffer_window = create_screen_buffer_window();
     keypad(screen_buffer_window, TRUE);
 
     /* Open image from file or create a new clean buffer */
@@ -76,11 +75,11 @@ int main(int argc, char *argv[]) {
 
         /* Clear current position */
         mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
+        y_old = screen_buffer.cursor_y;
+        x_old = screen_buffer.cursor_x;
 
         /* Show cursor */
         show_cursor(&screen_buffer, screen_buffer_window);
-        y_old = screen_buffer.cursor_y;
-        x_old = screen_buffer.cursor_x;
 
         /* Show image */
         show_screen_buffer(&screen_buffer, screen_buffer_window);

@@ -24,6 +24,7 @@
 
 void init_curses();
 void init_colors();
+WINDOW *create_screen_buffer_window();
 void init_screen_buffer(screen_buffer_t *screen_buffer);
 
 #endif
