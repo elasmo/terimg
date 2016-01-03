@@ -19,6 +19,7 @@ void init_curses() {
     curs_set(0);
     noecho();
 
+    /*
     int term_height = MAX_HEIGHT; // FIXME lyulz
     int term_width = MAX_WIDTH; // FIXME lyulz
 
@@ -27,6 +28,7 @@ void init_curses() {
         fprintf(stderr, "At least %dx%d required.\n", MAX_WIDTH, MAX_HEIGHT);
         exit(EXIT_FAILURE);
     }
+    */
 }
 
 /** 
@@ -76,7 +78,6 @@ void init_screen_buffer(screen_buffer_t *screen_buffer, WINDOW *screen_buffer_wi
        1. Set header data
        2. Create new_screen buffer
      */
-    size_t size;
 
     // Initial default values
     screen_buffer->file_version = 1;
@@ -85,15 +86,11 @@ void init_screen_buffer(screen_buffer_t *screen_buffer, WINDOW *screen_buffer_wi
     screen_buffer->area = screen_buffer->width * screen_buffer->height;
     screen_buffer->current_char = ACS_CKBOARD;
     screen_buffer->fg = 1;
-    screen_buffer->bg = 0;
-    //screen_buffer->cursor_x; ..how is this used?
-    //screen_buffer->cursor_y
+    screen_buffer->bg = 1;
+    screen_buffer->cursor_x = 2;
+    screen_buffer->cursor_y = 2;
     screen_buffer->buffer_modified = 0;
     screen_buffer->points =  new_screen_buffer();
-
-    // XXX: Separate screen_buffer and screen_buffer_window ?
-    screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
-                                         BORDER_BEGIN_Y, BORDER_BEGIN_X, TRUE);
 }
 
 /// XXX void init_menu() {

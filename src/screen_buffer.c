@@ -16,11 +16,12 @@
   * Create new empty screen buffer
   *
   */
-point_t *new_screen_buffer(int num_points) {
+point_t *new_screen_buffer() {
     size_t bytes;
     point_t *points;
 
     bytes = num_points(sizeof(point_t));
+
     points = malloc(bytes);
 
     if(points == NULL) {

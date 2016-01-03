@@ -10,7 +10,7 @@
 #ifndef SCREEN_BUFFER_H
 #define SCREEN_BUFFER_H
 
-#include <ncurses.h>
+#include <curses.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

@@ -38,3 +38,12 @@ void edit_point(screen_buffer_t *screen_buffer, int pos) {
        3. Set a variable to indicate that the screen buffer is modified
      */
 }
+
+/**
+ * Show cursor
+ *
+ */
+void show_cursor(screen_buffer_t *screen_buffer,WINDOW *screen_buffer_window) {
+    mvwaddch(screen_buffer_window, screen_buffer->cursor_y, 
+             screen_buffer->cursor_x, screen_buffer->current_char);
+}

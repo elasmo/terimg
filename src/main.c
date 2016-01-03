@@ -7,6 +7,7 @@
 * ----------------------------------------------------------------------------  
 */                   
 #include "main.h"
+#include "edit.h"
 #include "init.h"
 
 void exit_program() {                                                             
@@ -14,20 +15,30 @@ void exit_program() {
     endwin();                                                                     
     fprintf(stderr, "Exiting!\n");                                                
     exit(EXIT_SUCCESS);                                                           
-}                        
+}
+
+void show_banner() {
+    attron(A_BOLD);
+    mvprintw(0, MAX_WIDTH-6, "[terimg]");
+    attroff(A_BOLD);
+    refresh();
+}
+
 
 int main(int argc, char *argv[]) {
-    int y_old, x_old, term_height, term_width, cur_pos;
+    int y_old, x_old, term_height, term_width, cur_pos, busy;
     char *filename = NULL;
-    bool busy;
-    screen_buffer_t *screen_buffer;
-    WINDOW *screen_buffer_window;
+    WINDOW *screen_buffer_window = NULL;
+    screen_buffer_t screen_buffer;
 
     atexit((void *) exit_program);
 
     init_curses();
-//    init_colors();
-    init_screen_buffer(screen_buffer, screen_buffer_window);
+    init_colors();
+    init_screen_buffer(&screen_buffer, screen_buffer_window);
+    screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
+                                         BORDER_BEGIN_Y, BORDER_BEGIN_X, TRUE);
+    show_banner();
     //init_menu(); /// XXX: def
 
 
@@ -46,22 +57,23 @@ int main(int argc, char *argv[]) {
         // Set cursor position
         // Show image
         // Show cursor
-        // Show program logo
+        show_cursor(&screen_buffer, screen_buffer_window);
+
+//    mvwaddch(screen_buffer_window, screen_buffer.cursor_y, 
+//             screen_buffer.cursor_x, screen_buffer.current_char);
         // show menu bar
         // redraw and update screen buffer
-//        show_screen_buffer(screen_buffer, screen_buffer_window);
-        refresh();
-        sleep(1);
-//        redrawwin(screen_buffer_window);
-
+        show_screen_buffer(&screen_buffer, screen_buffer_window);
+        wrefresh(screen_buffer_window);
 
         /*
          * Keyboard input routines goes here:
          * .. menu handler, screen buffer editing
          */
     }
-
     // Deinit
+
+    refresh();
 
     return(EXIT_SUCCESS);
 }

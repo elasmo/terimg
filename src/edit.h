@@ -13,4 +13,5 @@
 
 void delete_point(screen_buffer_t *screen_buffer, int pos);
 void edit_point(screen_buffer_t *screen_buffer, int pos);
+void show_cursor(screen_buffer_t *screen_buffer,WINDOW *screen_buffer_window);
 #endif
