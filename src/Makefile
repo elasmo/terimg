@@ -29,4 +29,4 @@ build:  $(OBJS)
 	@$(COMPILE) $(CFLAGS) -o $@ $<
 
 clean:
-	-rm -f $(OBJS) $(EXECUTABLE)
+	-rm -f $(OBJS) $(EXECUTABLE) *.core

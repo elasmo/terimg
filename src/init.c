@@ -85,9 +85,9 @@ void init_screen_buffer(screen_buffer_t *screen_buffer, WINDOW *screen_buffer_wi
     screen_buffer->height = IMAGE_HEIGHT;
     screen_buffer->area = screen_buffer->width * screen_buffer->height;
     screen_buffer->current_char = ACS_CKBOARD;
-    screen_buffer->fg = 1;
-    screen_buffer->bg = 1;
-    screen_buffer->cursor_x = 2;
+    screen_buffer->fg = COLOR_YELLOW;
+    screen_buffer->bg = COLOR_BLACK;
+    screen_buffer->cursor_x = 1;
     screen_buffer->cursor_y = 2;
     screen_buffer->buffer_modified = 0;
     screen_buffer->points =  new_screen_buffer();

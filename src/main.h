@@ -21,6 +21,8 @@
 #include "menu.h"
 #include "screen_buffer.h"
 #include "window.h"
+#include "ascii.h"
 
 void exit_program();
+void show_banner();
 #endif

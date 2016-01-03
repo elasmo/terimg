@@ -19,14 +19,14 @@ void exit_program() {
 
 void show_banner() {
     attron(A_BOLD);
-    mvprintw(0, MAX_WIDTH-6, "[terimg]");
+    mvprintw(0, MAX_WIDTH-6, "terimg_");
     attroff(A_BOLD);
     refresh();
 }
 
 
 int main(int argc, char *argv[]) {
-    int y_old, x_old, term_height, term_width, cur_pos, busy;
+    int y_old, x_old, term_height, term_width, cur_pos, busy, c;
     char *filename = NULL;
     WINDOW *screen_buffer_window = NULL;
     screen_buffer_t screen_buffer;
@@ -38,7 +38,11 @@ int main(int argc, char *argv[]) {
     init_screen_buffer(&screen_buffer, screen_buffer_window);
     screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
                                          BORDER_BEGIN_Y, BORDER_BEGIN_X, TRUE);
+    keypad(screen_buffer_window, TRUE);
     show_banner();
+    mvprintw(0,0, "%d:%d", IMAGE_WIDTH, IMAGE_HEIGHT);
+    refresh();
+
     //init_menu(); /// XXX: def
 
 
@@ -54,27 +58,50 @@ int main(int argc, char *argv[]) {
     */
     busy = 1;
     while(busy) {
-        // Set cursor position
-        // Show image
+        // Set cursor position in buffer
+
+        // Clear current position
+        mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
+
         // Show cursor
         show_cursor(&screen_buffer, screen_buffer_window);
+        y_old = screen_buffer.cursor_y;
+        x_old = screen_buffer.cursor_x;
 
-//    mvwaddch(screen_buffer_window, screen_buffer.cursor_y, 
-//             screen_buffer.cursor_x, screen_buffer.current_char);
-        // show menu bar
-        // redraw and update screen buffer
+        // Show image
         show_screen_buffer(&screen_buffer, screen_buffer_window);
+
+        // redraw and update screen buffer
         wrefresh(screen_buffer_window);
 
         /*
          * Keyboard input routines goes here:
          * .. menu handler, screen buffer editing
          */
+        switch(c = wgetch(screen_buffer_window)) {
+        case KEY_UP:
+            if(screen_buffer.cursor_y > 1)
+                --screen_buffer.cursor_y;
+            break;
+        case KEY_DOWN:
+            if(screen_buffer.cursor_y < IMAGE_HEIGHT)
+                ++screen_buffer.cursor_y;
+            break;
+        case KEY_LEFT:
+            if(screen_buffer.cursor_x > 1)
+                --screen_buffer.cursor_x;
+            break;
+        case KEY_RIGHT:
+            if(screen_buffer.cursor_x < IMAGE_WIDTH)
+                ++screen_buffer.cursor_x;
+            break;
+        }
     }
     // Deinit
+    free(screen_buffer.points);
+    delwin(screen_buffer_window);
 
     refresh();
 
     return(EXIT_SUCCESS);
 }
-
