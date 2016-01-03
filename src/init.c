@@ -73,7 +73,7 @@ void init_colors() {
   * Initialize a new screen buffer
   *
   */
-void init_screen_buffer(screen_buffer_t *screen_buffer, WINDOW *screen_buffer_window) {
+void init_screen_buffer(screen_buffer_t *screen_buffer) {
     /*
        1. Set header data
        2. Create new_screen buffer

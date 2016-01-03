@@ -37,7 +37,7 @@ typedef struct {
     unsigned int bg;
     unsigned int cursor_x;
     unsigned int cursor_y;
-    unsigned int buffer_modified;
+    unsigned int modified;
     //short color_pairs; woot?
 } screen_buffer_t;
 

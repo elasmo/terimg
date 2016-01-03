@@ -33,24 +33,35 @@ int main(int argc, char *argv[]) {
 
     atexit((void *) exit_program);
 
+    /* Init */
     init_curses();
     init_colors();
-    init_screen_buffer(&screen_buffer, screen_buffer_window);
     screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
                                          BORDER_BEGIN_Y, BORDER_BEGIN_X, TRUE);
     keypad(screen_buffer_window, TRUE);
+
+    /* Open image from file or create a new clean buffer */
+    if(argc > 1) {
+        filename = argv[1];
+        fprintf(stderr, "Not implemented: open file %s\n", filename);
+        exit(EXIT_SUCCESS);
+                
+        //screen_buffer = open_file(filename);
+        //or open_file(screen_buffer, filename);
+    }
+    else {
+        init_screen_buffer(&screen_buffer);
+    }
+
+    /* Decorations and info */
     show_banner();
-    mvprintw(0,2, "image size: %d:%d", IMAGE_WIDTH, IMAGE_HEIGHT);
+    mvprintw(0,2, "image size: %dx%d", 
+             screen_buffer.width, 
+             screen_buffer.height);
     refresh();
 
     //init_menu(); /// XXX: def
 
-
-    if(argc > 1) {
-        filename = argv[1];
-        //screen_buffer = open_file(filename);
-        //or open_file(screen_buffer, filename);
-    }
 
     /*
      * Main program loop
@@ -58,23 +69,23 @@ int main(int argc, char *argv[]) {
     */
     busy = 1;
     while(busy) {
-        // Set cursor position in buffer
+        /* Set cursor position in buffer */
         cur_pos = get_bufpos(screen_buffer.cursor_x, 
                              screen_buffer.cursor_y,
                              screen_buffer.width);
 
-        // Clear current position
+        /* Clear current position */
         mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
 
-        // Show cursor
+        /* Show cursor */
         show_cursor(&screen_buffer, screen_buffer_window);
         y_old = screen_buffer.cursor_y;
         x_old = screen_buffer.cursor_x;
 
-        // Show image
+        /* Show image */
         show_screen_buffer(&screen_buffer, screen_buffer_window);
 
-        // redraw and update screen buffer
+        /* redraw and update screen buffer */
         wrefresh(screen_buffer_window);
 
         /*
@@ -82,15 +93,30 @@ int main(int argc, char *argv[]) {
          * .. menu handler, screen buffer editing
          */
         switch(c = wgetch(screen_buffer_window)) {
+        /* Editing */
         case SPACE:
             edit_point(&screen_buffer, cur_pos);
+            if(screen_buffer.cursor_x < screen_buffer.width)
+                ++screen_buffer.cursor_x;
+            break;
+        case KEY_DC:
+            delete_point(&screen_buffer, cur_pos);
+            if(screen_buffer.cursor_x < screen_buffer.width)
+                ++screen_buffer.cursor_x;
+            break;
+        /* Navigation */
+        case KEY_HOME:
+            screen_buffer.cursor_x = 1;
+            break;
+        case KEY_END:
+            screen_buffer.cursor_x = screen_buffer.width;
             break;
         case KEY_UP:
             if(screen_buffer.cursor_y > 1)
                 --screen_buffer.cursor_y;
             break;
         case KEY_DOWN:
-            if(screen_buffer.cursor_y < IMAGE_HEIGHT)
+            if(screen_buffer.cursor_y < screen_buffer.height)
                 ++screen_buffer.cursor_y;
             break;
         case KEY_LEFT:
@@ -98,7 +124,7 @@ int main(int argc, char *argv[]) {
                 --screen_buffer.cursor_x;
             break;
         case KEY_RIGHT:
-            if(screen_buffer.cursor_x < IMAGE_WIDTH)
+            if(screen_buffer.cursor_x < screen_buffer.width)
                 ++screen_buffer.cursor_x;
             break;
         }
