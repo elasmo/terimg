@@ -89,7 +89,7 @@ void init_screen_buffer(screen_buffer_t *screen_buffer) {
     screen_buffer->bg = COLOR_BLACK;
     screen_buffer->cursor_x = 1;
     screen_buffer->cursor_y = 2;
-    screen_buffer->buffer_modified = 0;
+    screen_buffer->modified = 0;
     screen_buffer->points =  new_screen_buffer();
 }
 
