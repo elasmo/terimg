@@ -1,4 +1,4 @@
-/*                                                                                                                                                                                                                 
+/*                                                                            
 * ----------------------------------------------------------------------------  
 * "THE BEER-WARE LICENSE" (Revision 42):                                        
 * <Johan> wrote this file. As long as you retain this notice you
@@ -18,21 +18,23 @@ void exit_program() {
 
 int main(int argc, char *argv[]) {
     int y_old, x_old, term_height, term_width, cur_pos;
-    const char *filename;
+    char *filename = NULL;
     bool busy;
-    screen_buffer_t *screen;
+    screen_buffer_t *screen_buffer;
+    WINDOW *screen_buffer_window;
 
     atexit((void *) exit_program);
 
     init_curses();
-    init_colors();
-    //init_screen_buffer(screen);
+//    init_colors();
+    init_screen_buffer(screen_buffer, screen_buffer_window);
     //init_menu(); /// XXX: def
 
 
     if(argc > 1) {
         filename = argv[1];
-        screen = open_file(filename);
+        //screen_buffer = open_file(filename);
+        //or open_file(screen_buffer, filename);
     }
 
     /*
@@ -47,6 +49,11 @@ int main(int argc, char *argv[]) {
         // Show program logo
         // show menu bar
         // redraw and update screen buffer
+//        show_screen_buffer(screen_buffer, screen_buffer_window);
+        refresh();
+        sleep(1);
+//        redrawwin(screen_buffer_window);
+
 
         /*
          * Keyboard input routines goes here:

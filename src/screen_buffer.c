@@ -10,7 +10,7 @@
 #include "screen_buffer.h"
 #include "init.h"
 
-#define num_points(x) (MAX_WIDTH * MAX_HEIGHT * x)
+#define num_points(x) (IMAGE_WIDTH * IMAGE_HEIGHT * x)
 
 /**
   * Create new empty screen buffer
@@ -37,6 +37,13 @@ point_t *new_screen_buffer(int num_points) {
   * Display screen buffer 
   *
   */
-void show_screen_buffer(WINDOW *win, screen_buffer_t *screen) {
+void show_screen_buffer(screen_buffer_t *image, WINDOW *win) {
     // Loop through points and display on window
+    int i;
+    for(i = 0; i < image->area; i++) {
+        if(image->points[i].y > 0 && image->points[i].x > 0) {
+            mvwaddch(win, image->points[i].y, image->points[i].x,
+                     image->points[i].ch);
+        }
+    }
 }

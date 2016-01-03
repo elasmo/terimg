@@ -28,19 +28,20 @@ typedef struct {
 // Screen buffer definition
 typedef struct {
     point_t *points;
-    short file_version;
-    short width;
-    short height;
-    int area;
+    unsigned int file_version;
+    unsigned int width;
+    unsigned int height;
+    unsigned int area;
     chtype current_char;
-    short current_color_pair;
-    short cursor_x;
-    short cursor_y;
-    bool buffer_modified;
-    short color_pairs;
+    unsigned int fg;
+    unsigned int bg;
+    unsigned int cursor_x;
+    unsigned int cursor_y;
+    unsigned int buffer_modified;
+    //short color_pairs; woot?
 } screen_buffer_t;
 
-point_t *new_screen_buffer(int num_points);
-void show_screen_buffer(WINDOW *win, screen_buffer_t *screen);
+point_t *new_screen_buffer();
+void show_screen_buffer(screen_buffer_t *image, WINDOW *win);
 
 #endif

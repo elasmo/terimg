@@ -59,6 +59,15 @@ void init_colors() {
 }
 
 /**
+  * Create screen buffer decorations
+  *
+  */
+//void create_screen_buffer_deco(WINDOW *screen_buffer_window) {
+//    screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
+//                                         BORDER_BEFIN_Y, BORDER_BEGIN_X, TRUE);
+//}
+
+/**
   * Initialize a new screen buffer
   *
   */
@@ -67,15 +76,30 @@ void init_screen_buffer(screen_buffer_t *screen_buffer, WINDOW *screen_buffer_wi
        1. Set header data
        2. Create new_screen buffer
      */
+    size_t size;
+
+    // Initial default values
+    screen_buffer->file_version = 1;
+    screen_buffer->width = IMAGE_WIDTH;
+    screen_buffer->height = IMAGE_HEIGHT;
+    screen_buffer->area = screen_buffer->width * screen_buffer->height;
+    screen_buffer->current_char = ACS_CKBOARD;
+    screen_buffer->fg = 1;
+    screen_buffer->bg = 0;
+    //screen_buffer->cursor_x; ..how is this used?
+    //screen_buffer->cursor_y
+    screen_buffer->buffer_modified = 0;
+    screen_buffer->points =  new_screen_buffer();
+
+    // XXX: Separate screen_buffer and screen_buffer_window ?
     screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
                                          BORDER_BEGIN_Y, BORDER_BEGIN_X, TRUE);
-
 }
 
 /// XXX void init_menu() {
-//}
-//
-
 // Create a holder for the menu bar
 // Initialize menu and set attributes
 // Set initial settings (default colors etc.)
+//}
+//
+
