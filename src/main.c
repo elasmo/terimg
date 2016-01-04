@@ -136,6 +136,7 @@ int main(int argc, char *argv[]) {
                 ++screen_buffer.cursor_x;
             break;
         }
+    }
 
 
     // Deinit
