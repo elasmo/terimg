@@ -26,6 +26,7 @@ void delete_point(screen_buffer_t *image, int pos) {
     image->points[pos].fg = 0;
     image->points[pos].bg = 0;
     image->points[pos].ch = 0;
+    image->modified = 1;
 }
 
 /**

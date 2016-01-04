@@ -42,6 +42,7 @@ void init_colors() {
     }
 
     start_color();
+    init_pair(1, COLOR_YELLOW, COLOR_BLACK);
 
     //short color_pair, fg, bg, i, n;
 
@@ -65,8 +66,11 @@ void init_colors() {
   *
   */
 WINDOW *create_screen_buffer_window() {
-    return create_window(MAX_HEIGHT+2, MAX_WIDTH+2, BORDER_BEGIN_Y, 
+    WINDOW *win = create_window(MAX_HEIGHT+2, MAX_WIDTH+2, BORDER_BEGIN_Y, 
                          BORDER_BEGIN_X, TRUE);
+    keypad(win, TRUE);
+
+    return win;
 }
 
 /**
@@ -99,4 +103,3 @@ void init_screen_buffer(screen_buffer_t *screen_buffer) {
 // Set initial settings (default colors etc.)
 //}
 //
-

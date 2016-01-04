@@ -10,7 +10,7 @@ OBJS=edit.o \
 	 menu.o \
 	 main.o
 
-CFLAGS=-Wall
+CFLAGS=-Wall -DDEV
 LFLAGS=-lncurses
 
 CC?=gcc

@@ -19,7 +19,9 @@ void exit_program() {
 
 void show_banner() {
     attron(A_BOLD);
-    mvprintw(0, MAX_WIDTH-6, "terimg_");
+    attron(COLOR_PAIR(1));
+    mvprintw(0, MAX_WIDTH-6, "terimg");
+    attroff(COLOR_PAIR(1));
     attroff(A_BOLD);
     refresh();
 }
@@ -37,7 +39,6 @@ int main(int argc, char *argv[]) {
     init_curses();
     init_colors();
     screen_buffer_window = create_screen_buffer_window();
-    keypad(screen_buffer_window, TRUE);
 
     /* Open image from file or create a new clean buffer */
     if(argc > 1) {
@@ -54,11 +55,6 @@ int main(int argc, char *argv[]) {
 
     /* Decorations and info */
     show_banner();
-    mvprintw(0,2, "image size: %dx%d", 
-             screen_buffer.width, 
-             screen_buffer.height);
-    refresh();
-
     //init_menu(); /// XXX: def
 
 
@@ -75,7 +71,7 @@ int main(int argc, char *argv[]) {
 
         /* Clear current position */
         mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
-        y_old = screen_buffer.cursor_y;
+        y_old = screen_buffer.cursor_y; // XXX: getyx() ??
         x_old = screen_buffer.cursor_x;
 
         /* Show cursor */
@@ -84,8 +80,21 @@ int main(int argc, char *argv[]) {
         /* Show image */
         show_screen_buffer(&screen_buffer, screen_buffer_window);
 
-        /* redraw and update screen buffer */
+        /* Redraw and update screen buffer */
         wrefresh(screen_buffer_window);
+
+        /* Info */
+        mvprintw(MAX_HEIGHT+3,2, 
+                 "                                                         ");
+        mvprintw(MAX_HEIGHT+3, 2, "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
+                 screen_buffer.width, 
+                 screen_buffer.height,
+                 screen_buffer.cursor_x,
+                 screen_buffer.cursor_y,
+                 screen_buffer.modified,
+                 cur_pos);
+        refresh();
+
 
         /*
          * Keyboard input routines goes here:
@@ -127,12 +136,23 @@ int main(int argc, char *argv[]) {
                 ++screen_buffer.cursor_x;
             break;
         }
+
+
+	/*
+    mvprintw(stdscr,                                                                                                                                                                                                                                                            
+              BOARDWIDTH+1, 0, "Pos: %2d:%3d, Alloc: %ld, Save index: %4d Width: %d, Height: %d, Saved: %d", 
+              screen.cursorY,                                                   
+              screen.cursorX,                                                   
+              screen.area,                                                      
+              bufpos,                                                           
+              screen.width,                                                     
+              screen.height,                                                    
+              screen.bufferSaved);   */
     }
+
     // Deinit
     free(screen_buffer.points);
     delwin(screen_buffer_window);
-
-    refresh();
 
     return(EXIT_SUCCESS);
 }
