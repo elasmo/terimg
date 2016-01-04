@@ -138,18 +138,6 @@ int main(int argc, char *argv[]) {
         }
 
 
-	/*
-    mvprintw(stdscr,                                                                                                                                                                                                                                                            
-              BOARDWIDTH+1, 0, "Pos: %2d:%3d, Alloc: %ld, Save index: %4d Width: %d, Height: %d, Saved: %d", 
-              screen.cursorY,                                                   
-              screen.cursorX,                                                   
-              screen.area,                                                      
-              bufpos,                                                           
-              screen.width,                                                     
-              screen.height,                                                    
-              screen.bufferSaved);   */
-    }
-
     // Deinit
     free(screen_buffer.points);
     delwin(screen_buffer_window);
