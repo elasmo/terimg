@@ -10,7 +10,7 @@
 #include "edit.h"
 #include "init.h"
 
-void exit_program() {                                                             
+void exit_program() {
     curs_set(1);                                                                  
     endwin();                                                                     
     fprintf(stderr, "Exiting!\n");                                                
@@ -35,11 +35,6 @@ int main(int argc, char *argv[]) {
 
     atexit((void *) exit_program);
 
-    /* Init */
-    init_curses();
-    init_colors();
-    screen_buffer_window = create_screen_buffer_window();
-
     /* Open image from file or create a new clean buffer */
     if(argc > 1) {
         filename = argv[1];
@@ -49,9 +44,13 @@ int main(int argc, char *argv[]) {
         //screen_buffer = open_file(filename);
         //or open_file(screen_buffer, filename);
     }
-    else {
-        init_screen_buffer(&screen_buffer);
-    }
+
+    /* Init */
+    init_curses();
+    init_colors();
+    screen_buffer_window = create_screen_buffer_window();
+
+    init_screen_buffer(&screen_buffer);
 
     /* Decorations and info */
 //    show_banner();
