@@ -20,7 +20,7 @@ void exit_program() {
 void show_banner() {
     attron(A_BOLD);
     attron(COLOR_PAIR(1));
-    mvprintw(0, MAX_WIDTH-6, "terimg");
+    mvprintw(0, DEFAULT_WIDTH-6, "terimg");
     attroff(COLOR_PAIR(1));
     attroff(A_BOLD);
     refresh();
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
     }
 
     /* Decorations and info */
-    show_banner();
+//    show_banner();
     //init_menu(); /// XXX: def
 
 
@@ -84,9 +84,9 @@ int main(int argc, char *argv[]) {
         wrefresh(screen_buffer_window);
 
         /* Info */
-        mvprintw(MAX_HEIGHT+3,2, 
+        mvprintw(DEFAULT_HEIGHT+3,2, 
                  "                                                         ");
-        mvprintw(MAX_HEIGHT+3, 2, "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
+        mvprintw(DEFAULT_HEIGHT+3, 2, "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
                  screen_buffer.width, 
                  screen_buffer.height,
                  screen_buffer.cursor_x,

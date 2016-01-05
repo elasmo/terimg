@@ -20,12 +20,12 @@ void init_curses() {
     noecho();
 
     /*
-    int term_height = MAX_HEIGHT; // FIXME lyulz
-    int term_width = MAX_WIDTH; // FIXME lyulz
+    int term_height = DEFAULT_HEIGHT; // FIXME lyulz
+    int term_width = DEFAULT_WIDTH; // FIXME lyulz
 
     (void) getmaxyx(stdscr, term_height, term_width);
-    if(term_height < MAX_HEIGHT || term_width < MAX_WIDTH) {
-        fprintf(stderr, "At least %dx%d required.\n", MAX_WIDTH, MAX_HEIGHT);
+    if(term_height < DEFAULT_HEIGHT || term_width < DEFAULT_WIDTH) {
+        fprintf(stderr, "At least %dx%d required.\n", DEFAULT_WIDTH, DEFAULT_HEIGHT);
         exit(EXIT_FAILURE);
     }
     */
@@ -66,7 +66,7 @@ void init_colors() {
   *
   */
 WINDOW *create_screen_buffer_window() {
-    WINDOW *win = create_window(MAX_HEIGHT+2, MAX_WIDTH+2, BORDER_BEGIN_Y, 
+    WINDOW *win = create_window(DEFAULT_HEIGHT+2, DEFAULT_WIDTH+2, BORDER_BEGIN_Y, 
                          BORDER_BEGIN_X, TRUE);
     keypad(win, TRUE);
 

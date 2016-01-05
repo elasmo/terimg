@@ -14,10 +14,10 @@
 #include <errno.h>
 #include "screen_buffer.h"
 
-#define MAX_HEIGHT      24 
-#define MAX_WIDTH       80
-#define IMAGE_HEIGHT    24
-#define IMAGE_WIDTH     80
+#define DEFAULT_HEIGHT      24 
+#define DEFAULT_WIDTH       80
+#define IMAGE_HEIGHT    DEFAULT_HEIGHT
+#define IMAGE_WIDTH     DEFAULT_WIDTH
 
 #define BORDER_BEGIN_Y 1
 #define BORDER_BEGIN_X 1
