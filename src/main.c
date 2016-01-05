@@ -51,6 +51,7 @@ int main(int argc, char *argv[]) {
     screen_buffer_window = create_screen_buffer_window();
 
     init_screen_buffer(&screen_buffer);
+    curs_set(1 /* enable */);
 
     /* Decorations and info */
 //    show_banner();
@@ -63,37 +64,14 @@ int main(int argc, char *argv[]) {
     */
     busy = 1;
     while(busy) {
+        refresh();
         /* Set cursor position in buffer */
         cur_pos = get_bufpos(screen_buffer.cursor_x, 
                              screen_buffer.cursor_y,
                              screen_buffer.width);
 
-        /* Clear current position */
-        mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
         y_old = screen_buffer.cursor_y; // XXX: getyx() ??
         x_old = screen_buffer.cursor_x;
-
-        /* Show cursor */
-        show_cursor(&screen_buffer, screen_buffer_window);
-
-        /* Show image */
-        show_screen_buffer(&screen_buffer, screen_buffer_window);
-
-        /* Redraw and update screen buffer */
-        wrefresh(screen_buffer_window);
-
-        /* Info */
-        mvprintw(DEFAULT_HEIGHT+3,2, 
-                 "                                                         ");
-        mvprintw(DEFAULT_HEIGHT+3, 2, "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
-                 screen_buffer.width, 
-                 screen_buffer.height,
-                 screen_buffer.cursor_x,
-                 screen_buffer.cursor_y,
-                 screen_buffer.modified,
-                 cur_pos);
-        refresh();
-
 
         /*
          * Keyboard input routines goes here:
@@ -104,12 +82,12 @@ int main(int argc, char *argv[]) {
         case SPACE:
             edit_point(&screen_buffer, cur_pos);
             if(screen_buffer.cursor_x < screen_buffer.width)
-                ++screen_buffer.cursor_x;
+                screen_buffer.cursor_x++;
             break;
         case KEY_DC:
             delete_point(&screen_buffer, cur_pos);
             if(screen_buffer.cursor_x < screen_buffer.width)
-                ++screen_buffer.cursor_x;
+                screen_buffer.cursor_x++;
             break;
         /* Navigation */
         case KEY_HOME:
@@ -120,21 +98,42 @@ int main(int argc, char *argv[]) {
             break;
         case KEY_UP:
             if(screen_buffer.cursor_y > 1)
-                --screen_buffer.cursor_y;
+                screen_buffer.cursor_y--;
             break;
         case KEY_DOWN:
             if(screen_buffer.cursor_y < screen_buffer.height)
-                ++screen_buffer.cursor_y;
+                screen_buffer.cursor_y++;
             break;
         case KEY_LEFT:
             if(screen_buffer.cursor_x > 1)
-                --screen_buffer.cursor_x;
+                screen_buffer.cursor_x--;
             break;
         case KEY_RIGHT:
             if(screen_buffer.cursor_x < screen_buffer.width)
-                ++screen_buffer.cursor_x;
+                screen_buffer.cursor_x++;
             break;
         }
+
+        /* Info */
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "                                                         ");
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
+                 screen_buffer.width, 
+                 screen_buffer.height,
+                 screen_buffer.cursor_x,
+                 screen_buffer.cursor_y,
+                 screen_buffer.modified,
+                 cur_pos);
+
+        /* Show image */
+        show_screen_buffer(&screen_buffer, screen_buffer_window);
+
+        /* Update cursor position */
+        wmove(screen_buffer_window, 
+              screen_buffer.cursor_y,
+              screen_buffer.cursor_x);
+
     }
 
 

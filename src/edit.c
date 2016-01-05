@@ -50,12 +50,3 @@ void edit_point(screen_buffer_t *screen_buffer, int pos) {
         screen_buffer->modified = 1;
     }
 }
-
-/**
- * Show cursor
- *
- */
-void show_cursor(screen_buffer_t *screen_buffer,WINDOW *screen_buffer_window) {
-    mvwaddch(screen_buffer_window, screen_buffer->cursor_y, 
-             screen_buffer->cursor_x, screen_buffer->current_char);
-}
