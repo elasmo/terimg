@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
     curs_set(1 /* enable */);
 
     /* Decorations and info */
-//    show_banner();
+    show_banner();
     //init_menu(); /// XXX: def
 
 
