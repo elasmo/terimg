@@ -1,4 +1,4 @@
-/*                                                                                                                                                                                                                 
+/*                                                                             
 * ----------------------------------------------------------------------------  
 * "THE BEER-WARE LICENSE" (Revision 42):                                        
 * <Johan> wrote this file. As long as you retain this notice you
@@ -7,10 +7,10 @@
 * ----------------------------------------------------------------------------  
 */                   
 
-#ifndef EDIT_H
-#define EDIT_H
-#include "screen_buffer.h"
+#ifndef ASCII_H
+#define ASCII_H
 
-void delete_point(screen_buffer_t *screen_buffer, int pos);
-void edit_point(screen_buffer_t *screen_buffer, int pos);
+#define SPACE   32
+#define ESCAPE  27
+#define ENTER   10
 #endif

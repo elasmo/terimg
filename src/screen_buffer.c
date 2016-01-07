@@ -1,4 +1,4 @@
-/*                                                                                                                                                                                                                 
+/*                                                                            
 * ----------------------------------------------------------------------------  
 * "THE BEER-WARE LICENSE" (Revision 42):                                        
 * <Johan> wrote this file. As long as you retain this notice you
@@ -7,20 +7,21 @@
 * ----------------------------------------------------------------------------  
 */      
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
 #include "screen_buffer.h"
+#include "init.h"
+
+#define num_points(x) (IMAGE_WIDTH * IMAGE_HEIGHT * x)
 
 /**
   * Create new empty screen buffer
   *
   */
-point_t *new_screen_buffer(int num_points) {
+point_t *new_screen_buffer() {
     size_t bytes;
     point_t *points;
 
     bytes = num_points(sizeof(point_t));
+
     points = malloc(bytes);
 
     if(points == NULL) {
@@ -37,6 +38,20 @@ point_t *new_screen_buffer(int num_points) {
   * Display screen buffer 
   *
   */
-void show_screen_buffer(WINDOW *win, screen_buffer_t *screen) {
-    // Loop through points and display on window
+void show_screen_buffer(screen_buffer_t *image, WINDOW *win) {
+    int i;
+    for(i = 0; i < image->area; i++) {
+        if(image->points[i].y > 0 && image->points[i].x > 0) {
+            mvwaddch(win, image->points[i].y, image->points[i].x,
+                     image->points[i].ch);
+        }
+    }
+}
+
+/**
+  * Get cursor position in buffer
+  *
+  */
+int get_bufpos(int x, int y, int width) {
+    return (x -1) + ((y -1) * width);
 }

@@ -1,4 +1,4 @@
-/*                                                                                                                                                                                                                 
+/*                                                                            
 * ----------------------------------------------------------------------------  
 * "THE BEER-WARE LICENSE" (Revision 42):                                        
 * <Johan> wrote this file. As long as you retain this notice you
@@ -6,29 +6,57 @@
 * this stuff is worth it, you can buy me a beer in return. Johan                
 * ----------------------------------------------------------------------------  
 */                   
-#include <curses.h>
-#include <stdlib.h> // malloc
-#include <string.h> // memset
-#include <time.h> // time()
+#include "main.h"
+#include "edit.h"
+#include "init.h"
+
+void exit_program() {
+    curs_set(1);                                                                  
+    endwin();                                                                     
+    fprintf(stderr, "Exiting!\n");                                                
+    exit(EXIT_SUCCESS);                                                           
+}
+
+void show_banner() {
+    attron(A_BOLD);
+    attron(COLOR_PAIR(1));
+    mvprintw(0, DEFAULT_WIDTH-6, "terimg");
+    attroff(COLOR_PAIR(1));
+    attroff(A_BOLD);
+    refresh();
+}
+
 
 int main(int argc, char *argv[]) {
-    int y_old, x_old, term_height, term_width, cur_pos;
-    const char *filename;
-    bool busy;
-    screen_buffer_t *screen;
+    int y_old, x_old, term_height, term_width, cur_pos, busy, c;
+    char *filename = NULL;
+    WINDOW *screen_buffer_window = NULL;
+    screen_buffer_t screen_buffer;
+
+    y_old = x_old = 1;
 
     atexit((void *) exit_program);
 
-    init_curses();
-    init_colors();
-    init_screen_buffer();
-    init_menu(); /// XXX: def
-
-
+    /* Open image from file or create a new clean buffer */
     if(argc > 1) {
         filename = argv[1];
-        screen = open_file(filename);
+        fprintf(stderr, "Not implemented: open file %s\n", filename);
+        exit(EXIT_SUCCESS);
+                
+        //screen_buffer = open_file(filename);
+        //or open_file(screen_buffer, filename);
     }
+
+    /* Init */
+    init_curses();
+    init_colors();
+    screen_buffer_window = create_screen_buffer_window();
+    init_screen_buffer(&screen_buffer);
+
+    /* Decorations and info */
+    show_banner();
+    //init_menu(); /// XXX: def
+
 
     /*
      * Main program loop
@@ -36,20 +64,89 @@ int main(int argc, char *argv[]) {
     */
     busy = 1;
     while(busy) {
-        // Set cursor position
-        // Show image
-        // Show cursor
-        // Show program logo
-        // show menu bar
-        // redraw and update screen buffer
+        refresh();
+        wrefresh(screen_buffer_window);
+
+        /* Set cursor position in buffer */
+        cur_pos = get_bufpos(screen_buffer.cursor_x, 
+                             screen_buffer.cursor_y,
+                             screen_buffer.width);
+
+        /* Clear old cursor position */
+        mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
+        y_old = screen_buffer.cursor_y; // XXX: getyx() ??
+        x_old = screen_buffer.cursor_x;
+
+        /* Show image */
+        show_screen_buffer(&screen_buffer, screen_buffer_window);
+
+        /* Show cursor */
+        mvwaddch(screen_buffer_window, 
+                 screen_buffer.cursor_y,
+                 screen_buffer.cursor_x,
+                 screen_buffer.current_char);
+
+        /* Info, temporary */
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "                                                                                      ");
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
+                 screen_buffer.width, 
+                 screen_buffer.height,
+                 screen_buffer.cursor_x,
+                 screen_buffer.cursor_y,
+                 screen_buffer.modified,
+                 cur_pos);
+
+
 
         /*
          * Keyboard input routines goes here:
          * .. menu handler, screen buffer editing
          */
+        switch(c = wgetch(screen_buffer_window)) {
+        /* Editing */
+        case SPACE:
+            edit_point(&screen_buffer, cur_pos);
+            if(screen_buffer.cursor_x < screen_buffer.width)
+                screen_buffer.cursor_x++;
+            break;
+        case KEY_DC:
+            delete_point(&screen_buffer, cur_pos);
+            if(screen_buffer.cursor_x < screen_buffer.width)
+                screen_buffer.cursor_x++;
+            break;
+        /* Navigation */
+        case KEY_HOME:
+            screen_buffer.cursor_x = 1;
+            break;
+        case KEY_END:
+            screen_buffer.cursor_x = screen_buffer.width;
+            break;
+        case KEY_UP:
+            if(screen_buffer.cursor_y > 1)
+                screen_buffer.cursor_y--;
+            break;
+        case KEY_DOWN:
+            if(screen_buffer.cursor_y < screen_buffer.height)
+                screen_buffer.cursor_y++;
+            break;
+        case KEY_LEFT:
+            if(screen_buffer.cursor_x > 1)
+                screen_buffer.cursor_x--;
+            break;
+        case KEY_RIGHT:
+            if(screen_buffer.cursor_x < screen_buffer.width)
+                screen_buffer.cursor_x++;
+            break;
+        }
+
     }
 
+
     // Deinit
+    free(screen_buffer.points);
+    delwin(screen_buffer_window);
 
     return(EXIT_SUCCESS);
 }

@@ -21,9 +21,7 @@ Fileformat:
          [y][x][color_pair][char]
 */
 
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "file.h"
 
 /**
  * Save screen buffer to file
@@ -62,10 +60,13 @@ screen_buffer_t *open_file(const char *filename) {
      */
     if(file_exists(filename)) {
         // do stuff
+        printf("woop");
     }
     else {
+        printf("woppn");
         // don't do stuff, warn etc.
     }
+    return NULL;
 }
 
 /**
@@ -74,7 +75,7 @@ screen_buffer_t *open_file(const char *filename) {
  * checking if the file sxists.
  *
  */
-bool file_exists(const char *filename) {
+int file_exists(const char *filename) {
     FILE *fp = NULL;
 
     if((fp = fopen(filename, "rb")) == NULL) {
