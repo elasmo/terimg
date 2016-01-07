@@ -33,6 +33,8 @@ int main(int argc, char *argv[]) {
     WINDOW *screen_buffer_window = NULL;
     screen_buffer_t screen_buffer;
 
+    y_old = x_old = 1;
+
     atexit((void *) exit_program);
 
     /* Open image from file or create a new clean buffer */
@@ -49,9 +51,7 @@ int main(int argc, char *argv[]) {
     init_curses();
     init_colors();
     screen_buffer_window = create_screen_buffer_window();
-
     init_screen_buffer(&screen_buffer);
-    curs_set(1 /* enable */);
 
     /* Decorations and info */
     show_banner();
@@ -65,13 +65,40 @@ int main(int argc, char *argv[]) {
     busy = 1;
     while(busy) {
         refresh();
+        wrefresh(screen_buffer_window);
+
         /* Set cursor position in buffer */
         cur_pos = get_bufpos(screen_buffer.cursor_x, 
                              screen_buffer.cursor_y,
                              screen_buffer.width);
 
+        /* Clear old cursor position */
+        mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
         y_old = screen_buffer.cursor_y; // XXX: getyx() ??
         x_old = screen_buffer.cursor_x;
+
+        /* Show image */
+        show_screen_buffer(&screen_buffer, screen_buffer_window);
+
+        /* Show cursor */
+        mvwaddch(screen_buffer_window, 
+                 screen_buffer.cursor_y,
+                 screen_buffer.cursor_x,
+                 screen_buffer.current_char);
+
+        /* Info, temporary */
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "                                                                                      ");
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
+                 screen_buffer.width, 
+                 screen_buffer.height,
+                 screen_buffer.cursor_x,
+                 screen_buffer.cursor_y,
+                 screen_buffer.modified,
+                 cur_pos);
+
+
 
         /*
          * Keyboard input routines goes here:
@@ -113,26 +140,6 @@ int main(int argc, char *argv[]) {
                 screen_buffer.cursor_x++;
             break;
         }
-
-        /* Info */
-        mvprintw(DEFAULT_HEIGHT+3, 2, 
-                 "                                                         ");
-        mvprintw(DEFAULT_HEIGHT+3, 2, 
-                 "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
-                 screen_buffer.width, 
-                 screen_buffer.height,
-                 screen_buffer.cursor_x,
-                 screen_buffer.cursor_y,
-                 screen_buffer.modified,
-                 cur_pos);
-
-        /* Show image */
-        show_screen_buffer(&screen_buffer, screen_buffer_window);
-
-        /* Update cursor position */
-        wmove(screen_buffer_window, 
-              screen_buffer.cursor_y,
-              screen_buffer.cursor_x);
 
     }
 
