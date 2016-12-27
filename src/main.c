@@ -127,6 +127,12 @@ int main(int argc, char *argv[]) {
             if(screen_buffer.cursor_x < screen_buffer.width)
                 ++screen_buffer.cursor_x;
             break;
+        case KEY_NPAGE:
+            if((screen_buffer.cursor_y + 4) < screen_buffer.height)
+                screen_buffer.cursor_y += 4;
+            else
+                screen_buffer.cursor_y = screen_buffer.height;
+            break;
         }
     }
     // Deinit
