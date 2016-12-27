@@ -20,12 +20,12 @@ void init_curses() {
     noecho();
 
     /*
-    int term_height = MAX_HEIGHT; // FIXME lyulz
-    int term_width = MAX_WIDTH; // FIXME lyulz
+    int term_height = DEFAULT_HEIGHT; // FIXME lyulz
+    int term_width = DEFAULT_WIDTH; // FIXME lyulz
 
     (void) getmaxyx(stdscr, term_height, term_width);
-    if(term_height < MAX_HEIGHT || term_width < MAX_WIDTH) {
-        fprintf(stderr, "At least %dx%d required.\n", MAX_WIDTH, MAX_HEIGHT);
+    if(term_height < DEFAULT_HEIGHT || term_width < DEFAULT_WIDTH) {
+        fprintf(stderr, "At least %dx%d required.\n", DEFAULT_WIDTH, DEFAULT_HEIGHT);
         exit(EXIT_FAILURE);
     }
     */
@@ -42,6 +42,7 @@ void init_colors() {
     }
 
     start_color();
+    init_pair(1, COLOR_YELLOW, COLOR_BLACK);
 
     //short color_pair, fg, bg, i, n;
 
@@ -64,10 +65,13 @@ void init_colors() {
   * Create screen buffer decorations
   *
   */
-//void create_screen_buffer_deco(WINDOW *screen_buffer_window) {
-//    screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
-//                                         BORDER_BEFIN_Y, BORDER_BEGIN_X, TRUE);
-//}
+WINDOW *create_screen_buffer_window() {
+    WINDOW *win = create_window(DEFAULT_HEIGHT+2, DEFAULT_WIDTH+2, BORDER_BEGIN_Y, 
+                         BORDER_BEGIN_X, TRUE);
+    keypad(win, TRUE);
+
+    return win;
+}
 
 /**
   * Initialize a new screen buffer
@@ -89,7 +93,7 @@ void init_screen_buffer(screen_buffer_t *screen_buffer) {
     screen_buffer->bg = COLOR_BLACK;
     screen_buffer->cursor_x = 1;
     screen_buffer->cursor_y = 2;
-    screen_buffer->buffer_modified = 0;
+    screen_buffer->modified = 0;
     screen_buffer->points =  new_screen_buffer();
 }
 
@@ -99,4 +103,3 @@ void init_screen_buffer(screen_buffer_t *screen_buffer) {
 // Set initial settings (default colors etc.)
 //}
 //
-

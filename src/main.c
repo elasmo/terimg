@@ -10,7 +10,7 @@
 #include "edit.h"
 #include "init.h"
 
-void exit_program() {                                                             
+void exit_program() {
     curs_set(1);                                                                  
     endwin();                                                                     
     fprintf(stderr, "Exiting!\n");                                                
@@ -19,7 +19,9 @@ void exit_program() {
 
 void show_banner() {
     attron(A_BOLD);
-    mvprintw(0, MAX_WIDTH-6, "terimg_");
+    attron(COLOR_PAIR(1));
+    mvprintw(0, DEFAULT_WIDTH-6, "terimg");
+    attroff(COLOR_PAIR(1));
     attroff(A_BOLD);
     refresh();
 }
@@ -31,14 +33,9 @@ int main(int argc, char *argv[]) {
     WINDOW *screen_buffer_window = NULL;
     screen_buffer_t screen_buffer;
 
-    atexit((void *) exit_program);
+    y_old = x_old = 1;
 
-    /* Init */
-    init_curses();
-    init_colors();
-    screen_buffer_window = create_window(MAX_HEIGHT+2, MAX_WIDTH+2,
-                                         BORDER_BEGIN_Y, BORDER_BEGIN_X, TRUE);
-    keypad(screen_buffer_window, TRUE);
+    atexit((void *) exit_program);
 
     /* Open image from file or create a new clean buffer */
     if(argc > 1) {
@@ -49,17 +46,15 @@ int main(int argc, char *argv[]) {
         //screen_buffer = open_file(filename);
         //or open_file(screen_buffer, filename);
     }
-    else {
-        init_screen_buffer(&screen_buffer);
-    }
+
+    /* Init */
+    init_curses();
+    init_colors();
+    screen_buffer_window = create_screen_buffer_window();
+    init_screen_buffer(&screen_buffer);
 
     /* Decorations and info */
     show_banner();
-    mvprintw(0,2, "image size: %dx%d", 
-             screen_buffer.width, 
-             screen_buffer.height);
-    refresh();
-
     //init_menu(); /// XXX: def
 
 
@@ -69,24 +64,41 @@ int main(int argc, char *argv[]) {
     */
     busy = 1;
     while(busy) {
+        refresh();
+        wrefresh(screen_buffer_window);
+
         /* Set cursor position in buffer */
         cur_pos = get_bufpos(screen_buffer.cursor_x, 
                              screen_buffer.cursor_y,
                              screen_buffer.width);
 
-        /* Clear current position */
+        /* Clear old cursor position */
         mvwaddch(screen_buffer_window, y_old, x_old, SPACE);
-
-        /* Show cursor */
-        show_cursor(&screen_buffer, screen_buffer_window);
-        y_old = screen_buffer.cursor_y;
+        y_old = screen_buffer.cursor_y; // XXX: getyx() ??
         x_old = screen_buffer.cursor_x;
 
         /* Show image */
         show_screen_buffer(&screen_buffer, screen_buffer_window);
 
-        /* redraw and update screen buffer */
-        wrefresh(screen_buffer_window);
+        /* Show cursor */
+        mvwaddch(screen_buffer_window, 
+                 screen_buffer.cursor_y,
+                 screen_buffer.cursor_x,
+                 screen_buffer.current_char);
+
+        /* Info, temporary */
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "                                                                                      ");
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
+                 screen_buffer.width, 
+                 screen_buffer.height,
+                 screen_buffer.cursor_x,
+                 screen_buffer.cursor_y,
+                 screen_buffer.modified,
+                 cur_pos);
+
+
 
         /*
          * Keyboard input routines goes here:
@@ -97,12 +109,12 @@ int main(int argc, char *argv[]) {
         case SPACE:
             edit_point(&screen_buffer, cur_pos);
             if(screen_buffer.cursor_x < screen_buffer.width)
-                ++screen_buffer.cursor_x;
+                screen_buffer.cursor_x++;
             break;
         case KEY_DC:
             delete_point(&screen_buffer, cur_pos);
             if(screen_buffer.cursor_x < screen_buffer.width)
-                ++screen_buffer.cursor_x;
+                screen_buffer.cursor_x++;
             break;
         /* Navigation */
         case KEY_HOME:
@@ -113,19 +125,19 @@ int main(int argc, char *argv[]) {
             break;
         case KEY_UP:
             if(screen_buffer.cursor_y > 1)
-                --screen_buffer.cursor_y;
+                screen_buffer.cursor_y--;
             break;
         case KEY_DOWN:
             if(screen_buffer.cursor_y < screen_buffer.height)
-                ++screen_buffer.cursor_y;
+                screen_buffer.cursor_y++;
             break;
         case KEY_LEFT:
             if(screen_buffer.cursor_x > 1)
-                --screen_buffer.cursor_x;
+                screen_buffer.cursor_x--;
             break;
         case KEY_RIGHT:
             if(screen_buffer.cursor_x < screen_buffer.width)
-                ++screen_buffer.cursor_x;
+                screen_buffer.cursor_x++;
             break;
         case KEY_NPAGE:
             if((screen_buffer.cursor_y + 4) < screen_buffer.height)
@@ -134,12 +146,13 @@ int main(int argc, char *argv[]) {
                 screen_buffer.cursor_y = screen_buffer.height;
             break;
         }
+
     }
+
+
     // Deinit
     free(screen_buffer.points);
     delwin(screen_buffer_window);
-
-    refresh();
 
     return(EXIT_SUCCESS);
 }

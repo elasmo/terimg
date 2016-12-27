@@ -17,9 +17,12 @@ WINDOW *create_window(short height, short width, short begin_y, short begin_x,
                       const bool BORDER) {
     WINDOW *win = newwin(height, width, begin_y, begin_x);
 
+
     if(BORDER)
         box(win, ACS_VLINE, ACS_HLINE);
 
+
+    //    wborder(win, 0, 0, 0, 0, 0, 0, 0, 0);
     return win;
 }
 

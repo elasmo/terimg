@@ -39,7 +39,6 @@ point_t *new_screen_buffer() {
   *
   */
 void show_screen_buffer(screen_buffer_t *image, WINDOW *win) {
-    // Loop through points and display on window
     int i;
     for(i = 0; i < image->area; i++) {
         if(image->points[i].y > 0 && image->points[i].x > 0) {
@@ -50,7 +49,7 @@ void show_screen_buffer(screen_buffer_t *image, WINDOW *win) {
 }
 
 /**
-  * Get cursors position in buffer
+  * Get cursor position in buffer
   *
   */
 int get_bufpos(int x, int y, int width) {
