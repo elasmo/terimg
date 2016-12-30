@@ -86,18 +86,6 @@ int main(int argc, char *argv[]) {
                  screen_buffer.cursor_x,
                  screen_buffer.current_char);
 
-        /* Info, temporary */
-        mvprintw(DEFAULT_HEIGHT+3, 2, 
-                 "                                                                                      ");
-        mvprintw(DEFAULT_HEIGHT+3, 2, 
-                 "size: %dx%d, cursor: %d:%d, mod: %d, bufpos: %d",
-                 screen_buffer.width, 
-                 screen_buffer.height,
-                 screen_buffer.cursor_x,
-                 screen_buffer.cursor_y,
-                 screen_buffer.modified,
-                 cur_pos);
-
 
 
         /*
@@ -145,9 +133,29 @@ int main(int argc, char *argv[]) {
             else
                 screen_buffer.cursor_y = screen_buffer.height;
             break;
+        case KEY_PPAGE:
+            if(screen_buffer.cursor_y > 4)
+                screen_buffer.cursor_y -= 4;
+            else
+                screen_buffer.cursor_y = 1;
+            break;
         }
 
+        /* Info, temporary */
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "                                                                                      ");
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "size: %2dx%2d, cursor: %2d:%2d, mod: %d, bufpos: %4d",
+                 screen_buffer.width, 
+                 screen_buffer.height,
+                 screen_buffer.cursor_x,
+                 screen_buffer.cursor_y,
+                 screen_buffer.modified,
+                 cur_pos);
+
+
     }
+
 
 
     // Deinit
