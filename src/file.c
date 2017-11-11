@@ -38,10 +38,25 @@ void save_file(const char *filename, screen_buffer_t *screen_buffer) {
      */
 
     FILE *fp;
+    int i;
+
     if((fp = fopen(filename, "wb")) == NULL) {
         fclose(fp);
         // Write error, notify user
     }
+
+    /* Header */
+    fwrite(&screen_buffer->width, 2, 1, fp);
+    fwrite(&screen_buffer->height, 2, 1, fp);
+
+    /* Image */
+    for(i = 0; i < screen_buffer->width * screen_buffer->height; ++i) {
+        fwrite(&screen_buffer->points[i].x, 2, 1, fp);
+        fwrite(&screen_buffer->points[i].y, 2, 1, fp);
+        fwrite(&screen_buffer->points[i].ch, 1, 1, fp);
+    }
+
+    fclose(fp);
 }
 
 /**
@@ -59,14 +74,14 @@ screen_buffer_t *open_file(const char *filename) {
        6. Close file and return screen buffer
      */
     if(file_exists(filename)) {
-        // do stuff
-        printf("woop");
+       
+
     }
     else {
-        printf("woppn");
+        // Notify user
         // don't do stuff, warn etc.
+        return NULL;
     }
-    return NULL;
 }
 
 /**

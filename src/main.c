@@ -64,7 +64,6 @@ int main(int argc, char *argv[]) {
     */
     busy = 1;
     while(busy) {
-        refresh();
         wrefresh(screen_buffer_window);
 
         /* Set cursor position in buffer */
@@ -86,6 +85,23 @@ int main(int argc, char *argv[]) {
                  screen_buffer.cursor_x,
                  screen_buffer.current_char);
 
+        /* Info, temporary */
+        /*
+        mvprintw(DEFAULT_HEIGHT+3, 2, 
+                 "                                                                                      ");*/
+        mvaddstr(0, 2, "F(1) SAVE\tF(2) OPEN\tF(3) EXIT");
+
+        mvprintw(DEFAULT_HEIGHT+4, 2, 
+                 "size: %2dx%2d, cursor: %2d:%2d, mod: %d, bufpos: %4d",
+                 screen_buffer.width, 
+                 screen_buffer.height,
+                 screen_buffer.cursor_x,
+                 screen_buffer.cursor_y,
+                 screen_buffer.modified,
+                 cur_pos);
+
+
+        refresh();
 
 
         /*
@@ -139,24 +155,18 @@ int main(int argc, char *argv[]) {
             else
                 screen_buffer.cursor_y = 1;
             break;
+        /* Menu */
+        case KEY_F(1):
+            save_file("test.dat", &screen_buffer);
+            break;
+        case KEY_F(2):
+        case KEY_F(3):
+            busy = 0;
+            break;
         }
-
-        /* Info, temporary */
-        mvprintw(DEFAULT_HEIGHT+3, 2, 
-                 "                                                                                      ");
-        mvprintw(DEFAULT_HEIGHT+3, 2, 
-                 "size: %2dx%2d, cursor: %2d:%2d, mod: %d, bufpos: %4d",
-                 screen_buffer.width, 
-                 screen_buffer.height,
-                 screen_buffer.cursor_x,
-                 screen_buffer.cursor_y,
-                 screen_buffer.modified,
-                 cur_pos);
 
 
     }
-
-
 
     // Deinit
     free(screen_buffer.points);

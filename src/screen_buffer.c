@@ -53,5 +53,5 @@ void show_screen_buffer(screen_buffer_t *image, WINDOW *win) {
   *
   */
 int get_bufpos(int x, int y, int width) {
-    return (x -1) + ((y -1) * width);
+    return (x -1) + ((y -1) * width); /// XXX: (-1) cause of borders?
 }

@@ -8,6 +8,7 @@
 */                   
 
 #include <curses.h>
+#include <stdbool.h>
 
 /**
   * Create a window
@@ -21,8 +22,6 @@ WINDOW *create_window(short height, short width, short begin_y, short begin_x,
     if(BORDER)
         box(win, ACS_VLINE, ACS_HLINE);
 
-
-    //    wborder(win, 0, 0, 0, 0, 0, 0, 0, 0);
     return win;
 }
 
