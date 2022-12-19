@@ -1,8 +1,11 @@
-/*
-Idea:
-Make it possible to easily attach "modules" 
-which can manipulate the screen buffer in
-different ways.
+Idea
+    Make it possible to easily add extra functionality that would make it
+    possible to manipulate the screen buffer.
 
-eg: invert colors, rotate, bucket fill
-*/
+    Examples
+        Color manipulation
+            Invert
+            Random
+        Rotate 
+        Bucket fill
+        Anti aliasing
